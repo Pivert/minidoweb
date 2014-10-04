@@ -1,0 +1,5 @@
+Log = new Meteor.Collection('log')
+Exo = new Meteor.Collection('exo')
+Exi = new Meteor.Collection('exi')
+Output = new Meteor.Collection('output')
+Actuator = new Meteor.Collection('actuator')
