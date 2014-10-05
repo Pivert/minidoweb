@@ -13,7 +13,7 @@
       bgcolor="White">
         <li class="ContextItem rename"><span>Location : </span><input type="text" id="location" value="Rename"></li>
           <li class="ContextItem rename"><span>Room : </span><input type="text" id="room" value="Rename"></li>
-          <li class="ContextItem add"><span>Program Mode</span>
+          <li class="ContextItem"><span>Program Mode</span>
             <span><input type="radio" name="pmode" value="none" checked="checked">None</span>
             <span><input type="radio" name="pmode" value="add">Add</span>
             <span><input type="radio" name="pmode" value="remove">Remove</span>
@@ -33,7 +33,9 @@
 </template>
 
 <template name="output">
-  <li class="output" style="background-color: {{bgcolor state}};" contextmenu="context-menu-id">
-  <div class="exo" title="Last State Duration : {{duration lastStateDuration}}/{{exoname}}">{{displayname}}</div>
+  <li class="output" style="background-color: {{bgcolor state}};" contextmenu="context-menu-id" title="Last State Duration : {{duration lastStateDuration}}/{{exoname}}">
+  <div class="exo">{{displaylocation}}</div>
+  <div class="exo">{{displayname}}</div>
+  <div class="learning {{learning}}"></div>
   </li >
 </template>

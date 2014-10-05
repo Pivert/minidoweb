@@ -1,20 +1,31 @@
-Meteor.subscribe('output')
-Meteor.subscribe('actuator')
-Meteor.subscribe('log')
-Meteor.subscribe('exo')
-Meteor.subscribe('exi')
+Meteor.subscribe 'output' 
+Meteor.subscribe 'actuator' 
+Meteor.subscribe 'log' 
+Meteor.subscribe 'exo' 
+Meteor.subscribe 'exi' 
+
+
 
 Meteor.startup ->
-  root = exports ? this
+  root = exports ? this    # CoffeeScript way to create a global variable
+
   root.ShowMenu = (control, e) ->
     # Position the context box
-    posx = e.clientX + window.pageXOffset + "px" #Left Position of Mouse Pointer
-    posy = e.clientY + window.pageYOffset + "px" #Top Position of Mouse Pointer
+    posx = e.clientX + window.pageXOffset #Left Position of Mouse Pointer
+    posy = e.clientY + window.pageYOffset #Top Position of Mouse Pointer
     document.getElementById(control).style.position = "absolute"
     document.getElementById(control).style.display = "inline"
-    document.getElementById(control).style.left = posx
-    document.getElementById(control).style.top = posy
 
+    # Change offset so the menu always appear in the visible part of the window
+    if $( window ).width() - e.clientX < 550
+      posx -= 404
+    if $( window ).height() - e.clientY < 200
+      posy -= 169
+
+    document.getElementById(control).style.left = posx + "px"
+    document.getElementById(control).style.top = posy + "px"
+
+    # Fill the menu with values
     doc = Output.findOne {_id: Session.get "context" }
     document.getElementById("location").value = if doc.location then doc.location else ''
     document.getElementById("room").value = if doc.room then doc.room else ''
@@ -56,12 +67,19 @@ Template.output.events =
     Session.set "context", this._id
     ShowMenu 'contextMenu',event 
 
+Template.output.displaylocation = () ->
+  if this.location
+    location = this.location
+    "#{location}"
+  else
+    "unknown"
 
 Template.output.displayname = () ->
   if this.location
     room = this.room
-    location = this.location
-    "#{room}-#{location}"
+    #location = this.location
+    #"#{room}-#{location}"
+    "#{room}"
   else
     exooutput = this.exo
     nroutput = this.output
@@ -88,7 +106,6 @@ Template.outputs.rendered = ->
         newRank = SimpleRationalRanks.afterLast(UI.getData(before).rank)
       else
         newRank = SimpleRationalRanks.between(UI.getData(before).rank, UI.getData(after).rank)
-
 
       Output.update UI.getData(el)._id,
         $set:

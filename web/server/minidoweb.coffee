@@ -1,12 +1,15 @@
-#
-#Meteor.publish 'output', Output.find()
-# TODO: Find a way to run the following publish commands from Meteor
-# Meteor.publish 'actuator', Actuator.find()
-# Meteor.publish 'log', Log.find()
-# Meteor.publish 'exo', Exo.find()
-# Meteor.publish 'exi', Exi.find()
+Meteor.publish 'actuator', () ->
+  Actuator.find()
+Meteor.publish 'log', () ->
+  Log.find()
+Meteor.publish 'exo', () ->
+  Exo.find()
+Meteor.publish 'exi', () ->
+  Exi.find()
+Meteor.publish 'output', () ->
+  Output.find()
 
-root = exports ? this
+root = exports ? this # Global Scope for CoffeScript
 
 printRawPacket = (msg, packet) ->
   msg = msg + (' ' for x in [1..(20 - msg.length)] ).join('')
@@ -57,14 +60,12 @@ gotZmqObj = (obj) ->
         exo: exo
         output: output
 
-      # console.log("exo: #{exo} output: #{output} outputState: #{outputStates[output-1]} laststate: #{lastState.state}")
-       
       if (not lastState)
-      # No record ye.
+      # No record yet.
         Output.insert
           exo: exo
           output: output
-          exo: exo
+          rank: exo * 8 + output
           output: output
           utctime: new Date()
           state: outputStates[output-1]
@@ -124,7 +125,7 @@ Meteor.methods
 
 
 Meteor.startup ->
-  zmq = Meteor.require("zmq")
+  zmq = Meteor.npmRequire("zmq")
   socket = zmq.socket("sub")
   socket.subscribe ""
   socket.on "message", Meteor.bindEnvironment((data) ->
@@ -140,32 +141,26 @@ Meteor.startup ->
   cur = Output.find()
   
   cur.observeChanges(
-    changed: (id, mode) ->
-      # Find the related output
-      output = Output.findOne _id: id
-
-      # Let's build send learning mode for the exo/output to every EXO
-      # mode is in: ['none', 'add', 'remove']
-      mode = ['none', 'add', 'remove'].indexOf mode.learning
-      for exi in [1..5]
-        mdopkt = [
-          0x23,                                     # Beginig of an MDO packet
-          exi + MDO.EXIOFFSET,                      # Destination ID
-          MDWEXIID,                                 # Source ID
-          0x06,                                     # LEN: Length of the packet with Lenght octed and checksum
-          0x31,                                     # CMD: Write to exo command
-          mode,
-          output.exo,
-          output.output - 1,
-          0x00,
-        ]
-        console.log mdopkt
-        printRawPacket "Sending : ", mdopkt[1..] # Strip the 0x23 to print
-        root.zmqPush.send EJSON.stringify(mdopkt)
-        #
-      #Meteor.call 'exilearning',
-      #  exo: output.exo
-      #  output: output.output
-      #  mode: mode.learning
-      console.log "Learning Mode changed for " + id + ": " + mode.learning
+    changed: (id, pmode) ->
+      # First Check that the learning mode has changed.
+      if pmode.hasOwnProperty "learning"
+        output = Output.findOne _id: id
+        # Let's build send learning mode for the exo/output to every EXO
+        # pmode is in: ['none', 'add', 'remove']
+        mode = 1 + ['add', 'remove'].indexOf pmode.learning
+        for exi in [1..5]
+          mdopkt = [
+            0x23,                                     # Beginig of an MDO packet
+            exi + MDO.EXIOFFSET,                      # Destination ID
+            MDWEXIID,                                 # Source ID
+            0x06,                                     # LEN: Length of the packet with Lenght octed and checksum
+            0x31,                                     # CMD: Write to exo command
+            mode,
+            output.exo,
+            output.output - 1,
+            0x00,
+          ]
+          printRawPacket "Sending : ", mdopkt[1..] # Strip the 0x23 to print
+          root.zmqPush.send EJSON.stringify(mdopkt)
+        console.log "Learning Mode changed for " + id + ": " + mode.learning
   )

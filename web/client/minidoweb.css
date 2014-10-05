@@ -12,8 +12,8 @@ ul.main {
   padding: 3px;
   font-size: 1.2em;
   float: left;
-  height: 3.5em;
-  width: 4em;
+  height: 5.5em;
+  width: 10em;
   border-radius: 5px;
 } 
 
@@ -66,4 +66,17 @@ ul.contextmenu {
 button {
   width: 170px;
   margin: 7px;
+}
+
+.learning {
+  width: 20px;
+  height: 20px;
+}
+
+.add {
+  background-color: red;
+}
+
+.remove {
+  background-color: blue;
 }
