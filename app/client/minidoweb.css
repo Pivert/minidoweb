@@ -1,0 +1,62 @@
+/* CSS declarations go here */
+
+body {
+  background-color: black;
+}
+ul.main {
+}
+
+#sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+li span {
+  width: 90px;
+  display: inline-block;
+}
+html>body #sortable li { height: 4em; line-height: 1.2em; }
+.ui-state-highlight { height: 4em; line-height: 1.2em; }
+
+.ContextItem
+  {
+      /*background-color:White;*/
+      color:Black;
+      font-weight:normal;
+      padding: 3px;
+  }
+
+ul.contextmenu {
+  list-style: none;
+  padding: 10px;
+  margin: 1px;
+  border: thin solid #808080;
+  cursor: default;
+  border-radius: 6px;
+  background-color: white;
+  width: 380px;
+}
+
+button {
+  width: 170px;
+  margin: 7px;
+}
+
+.learning {
+  width: 20px;
+  height: 20px;
+}
+
+.add {
+  background-color: red;
+}
+
+.remove {
+  background-color: blue;
+}
+
+#sortable li {
+  margin: 3px;
+  padding: 3px;
+  font-size: 1.2em;
+  float: left;
+  height: 95px;
+  width: 136px;
+  border-radius: 5px;
+} 

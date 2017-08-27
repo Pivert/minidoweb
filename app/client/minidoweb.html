@@ -1,0 +1,41 @@
+<head>
+  <title>Minidoweb</title>
+</head>
+
+<body>
+  {{> outputs}}
+</body>
+
+<template name="ctmenu">
+  <div style="display:none; "   id="contextMenu">
+    <ul
+      class="contextmenu" width="100px" 
+      bgcolor="White">
+        <li class="ContextItem rename"><span>Location : </span><input type="text" id="location" value="Rename"></li>
+          <li class="ContextItem rename"><span>Room : </span><input type="text" id="room" value="Rename"></li>
+          <li class="ContextItem"><span>Program Mode</span>
+            <span><input type="radio" name="pmode" value="none" checked="checked">None</span>
+            <span><input type="radio" name="pmode" value="add">Add</span>
+            <span><input type="radio" name="pmode" value="remove">Remove</span>
+          </li>
+          <li class="ContextItem validate"><button id="validate">Validate</button><button id="cancel">Cancel</button></li>
+    </ul>
+  </div>
+</template>
+
+<template name="outputs">
+  {{> ctmenu}}
+  <ul class="main" id="sortable" oncontextmenu="return false">
+    {{#each outputs}}
+      {{> output}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="output">
+  <li class="output" style="background-color: {{bgcolor state}};" contextmenu="context-menu-id" title="Last State Duration : {{duration lastStateDuration}}/{{exoname}}">
+  <div class="exo">{{displaylocation}}</div>
+  <div class="exo">{{displayname}}</div>
+  <div class="learning {{learning}}"></div>
+  </li >
+</template>
