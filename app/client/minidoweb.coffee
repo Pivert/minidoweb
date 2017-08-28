@@ -4,9 +4,9 @@ Meteor.subscribe 'exo'
 #Meteor.subscribe 'exi' 
 
 Meteor.startup ->
-  root = exports ? this    # CoffeeScript way to create a global variable
+  #root = exports ? this    # CoffeeScript way to create a global variable
 
-  root.ShowMenu = (control, e) ->
+  window.ShowMenu = (control, e) ->
     # Position the context box
     posx = e.clientX + window.pageXOffset #Left Position of Mouse Pointer
     posy = e.clientY + window.pageYOffset #Top Position of Mouse Pointer
@@ -30,7 +30,7 @@ Meteor.startup ->
     for radio in radiolist
       radio.checked = ( radio.value == doc.learning )
 
-  root.HideMenu = (control) ->
+  window.HideMenu = (control) ->
     document.getElementById(control).style.display = "none"
 
 Template.outputs.outputs = ->
@@ -132,7 +132,7 @@ Template.ctmenu.events =
     HideMenu 'contextMenu'
 
 SimpleRationalRanks =
-  beforeFirst: (firstrank) -> 
+  beforeFirst: (firstRank) -> 
     (firstRank - 1)
   between: (beforeRank, afterRank) ->
     (beforeRank + afterRank) / 2
